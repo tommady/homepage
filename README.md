@@ -1,2 +1,2 @@
 # homepage
-serve tommady.com
+[serve](https://tommady.com)
