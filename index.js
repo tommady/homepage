@@ -1,40 +1,56 @@
-import wasmInit from "./pkg/homepage.js"
+import wasmInit, { Octocat } from "./pkg/homepage.js"
 
 const runWasm = async () => {
     const rustWasm = await wasmInit("./pkg/homepage_bg.wasm");
-    // const wasmByteMemoryArray = new Uint8Array(rustWasm.memory.buffer);
 
-    const canvasElement = document.getElementById("octocatCanvas");
-    const canvasContext = canvasElement.getContext("2d");
-    const canvasImageData = canvasContext.createImageData(
-        canvasElement.width,
-        canvasElement.height
+    const octocat = Octocat.new();
+     
+    const octocatCanvas = document.getElementById("octocatCanvas");
+    octocatCanvas.height = octocat.height();
+    octocatCanvas.width = octocat.width();
+    const octocatCtx = octocatCanvas.getContext("2d");
+    const octocatImageData = octocatCtx.createImageData(
+        octocatCanvas.width,
+        octocatCanvas.height
     );
-
-    const drawCheckerBoard = () => {
-        const width = 49;
-        const height = 22;
-
-        rustWasm.gen_octocat();
+    
+    const drawOctocat = () => {
+        octocat.gen(); 
         
         const wasmByteMemoryArray = new Uint8Array(rustWasm.memory.buffer);
-        const outputPointer = rustWasm.get_octocat_output_buffer_ptr();
+        const outputPointer = octocat.get_output_ptr();
         
         const imageDataArray = wasmByteMemoryArray.slice(
             outputPointer, 
-            outputPointer + width * height * 4
+            outputPointer + octocat.width() * octocat.height() * 4
         );
 
-        canvasImageData.data.set(imageDataArray);
-        canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        octocatImageData.data.set(imageDataArray);
+        octocatCtx.clearRect(0, 0, octocatCanvas.width, octocatCanvas.height);
 
-        canvasContext.putImageData(canvasImageData, 0, 0);
+        octocatCtx.putImageData(octocatImageData, 0, 0);
+    };
+    
+    drawOctocat();
+    let start = undefined;
+    const renderLoop = (timestamp) => {
+        if (start === undefined) {
+            start = timestamp;
+        }
+        
+        const elapsed = timestamp - start;
+
+        // Stop the animation after 2 seconds
+        if (elapsed > 2000) { 
+            drawOctocat();
+
+            start = undefined;
+            requestAnimationFrame(renderLoop);
+        } 
+        requestAnimationFrame(renderLoop);
     };
 
-    drawCheckerBoard();
-    setInterval(() => {
-        drawCheckerBoard();
-    }, 1000);
+    requestAnimationFrame(renderLoop);
 };
 
 runWasm();
