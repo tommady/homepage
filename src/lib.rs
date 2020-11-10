@@ -1,11 +1,8 @@
 use rand::Rng;
 use wasm_bindgen::prelude::*;
 
-// macro_rules! log {
-//     ( $( $t:tt )* ) => {
-//         web_sys::console::log_1(&format!( $( $t )* ).into());
-//     }
-// }
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
 pub struct Octocat {
@@ -24,8 +21,8 @@ impl Octocat {
             octocat.push(row);
         }
 
-        let width = octocat[0].len();
         let height = octocat.len();
+        let width = octocat[0].len();
 
         Octocat {
             width: width,
@@ -55,9 +52,7 @@ impl Octocat {
         let blue: u8 = rng.gen_range(0, 255);
 
         for y in 0..self.height {
-            // log!("y:{}", y);
             for x in 0..self.width {
-                // log!("x:{}", x);
                 if self.original[y][x] != ' ' {
                     let index: usize = y * self.width + x;
                     let rgba_index: usize = index * 4;
