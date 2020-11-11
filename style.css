@@ -15,7 +15,12 @@ html, body {
 }
 
 .social-links {
-    list-style:none;
+    list-style-type: none;
+    text-align: center;
+}
+
+.social-links li {
+    display: inline-block;
 }
 
 .profile-picture {

@@ -1,4 +1,4 @@
-import wasmInit, { Octocat } from "./pkg/homepage.js"
+import wasmInit, { Octocat, Email, Linkedin } from "./pkg/homepage.js"
 
 const runWasm = async () => {
     const rustWasm = await wasmInit("./pkg/homepage_bg.wasm");
@@ -30,8 +30,67 @@ const runWasm = async () => {
 
         octocatCtx.putImageData(octocatImageData, 0, 0);
     };
+
+    const email = Email.new();
+     
+    const emailCanvas = document.getElementById("emailCanvas");
+    emailCanvas.height = email.height();
+    emailCanvas.width = email.width();
+    const emailCtx = emailCanvas.getContext("2d");
+    const emailImageData = emailCtx.createImageData(
+        emailCanvas.width,
+        emailCanvas.height
+    );
+    
+    const drawEmail = () => {
+        email.gen(); 
+        
+        const wasmByteMemoryArray = new Uint8Array(rustWasm.memory.buffer);
+        const outputPointer = email.get_output_ptr();
+        
+        const imageDataArray = wasmByteMemoryArray.slice(
+            outputPointer, 
+            outputPointer + email.width() * email.height() * 4
+        );
+
+        emailImageData.data.set(imageDataArray);
+        emailCtx.clearRect(0, 0, emailCanvas.width, emailCanvas.height);
+
+        emailCtx.putImageData(emailImageData, 0, 0);
+    };
+
+    const linkedin = Linkedin.new();
+     
+    const linkedinCanvas = document.getElementById("linkedinCanvas");
+    linkedinCanvas.height = linkedin.height();
+    linkedinCanvas.width = linkedin.width();
+    const linkedinCtx = linkedinCanvas.getContext("2d");
+    const linkedinImageData = linkedinCtx.createImageData(
+        linkedinCanvas.width,
+        linkedinCanvas.height
+    );
+    
+    const drawLinkedin = () => {
+        linkedin.gen(); 
+        
+        const wasmByteMemoryArray = new Uint8Array(rustWasm.memory.buffer);
+        const outputPointer = linkedin.get_output_ptr();
+        
+        const imageDataArray = wasmByteMemoryArray.slice(
+            outputPointer, 
+            outputPointer + linkedin.width() * linkedin.height() * 4
+        );
+
+        linkedinImageData.data.set(imageDataArray);
+        linkedinCtx.clearRect(0, 0, linkedinCanvas.width, linkedinCanvas.height);
+
+        linkedinCtx.putImageData(linkedinImageData, 0, 0);
+    };
     
     drawOctocat();
+    drawEmail(); 
+    drawLinkedin();
+
     let start = undefined;
     const renderLoop = (timestamp) => {
         if (start === undefined) {
@@ -43,6 +102,8 @@ const runWasm = async () => {
         // Stop the animation after 2 seconds
         if (elapsed > 2000) { 
             drawOctocat();
+            drawEmail();
+            drawLinkedin();
 
             start = undefined;
             requestAnimationFrame(renderLoop);
