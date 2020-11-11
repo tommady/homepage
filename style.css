@@ -21,6 +21,7 @@ html, body {
 
 .social-links li {
     display: inline-block;
+    margin: 30px;
 }
 
 .profile-picture {
