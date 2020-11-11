@@ -1,9 +1,9 @@
-import wasmInit, { Octocat, Email, Linkedin } from "./pkg/homepage.js"
+import wasmInit, { Animation  } from "./pkg/homepage.js"
 
 const runWasm = async () => {
     const rustWasm = await wasmInit("./pkg/homepage_bg.wasm");
 
-    const octocat = Octocat.new();
+    const octocat = Animation.new("octocat");
      
     const octocatCanvas = document.getElementById("octocatCanvas");
     octocatCanvas.height = octocat.height();
@@ -31,7 +31,7 @@ const runWasm = async () => {
         octocatCtx.putImageData(octocatImageData, 0, 0);
     };
 
-    const email = Email.new();
+    const email = Animation.new("email");
      
     const emailCanvas = document.getElementById("emailCanvas");
     emailCanvas.height = email.height();
@@ -59,7 +59,7 @@ const runWasm = async () => {
         emailCtx.putImageData(emailImageData, 0, 0);
     };
 
-    const linkedin = Linkedin.new();
+    const linkedin = Animation.new("linkedin");
      
     const linkedinCanvas = document.getElementById("linkedinCanvas");
     linkedinCanvas.height = linkedin.height();
