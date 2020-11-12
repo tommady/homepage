@@ -1,7 +1,7 @@
-import wasmInit, { Animation  } from "./pkg/homepage.js"
+import wasmInit, { Animation  } from "./pkg/wasm.js"
 
 const runWasm = async () => {
-    const rustWasm = await wasmInit("./pkg/homepage_bg.wasm");
+    const rustWasm = await wasmInit("./pkg/wasm_bg.wasm");
 
     const draw = ({ instance, href }) => {
         const currentUL = document.getElementById("social-links");

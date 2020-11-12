@@ -1,16 +1,17 @@
-use gotham::handler::assets::FileOptions;
-use gotham::router::builder::{build_simple_router, DefineSingleRoute, DrawRoutes};
+use actix_files::Files;
+use actix_web::{App, HttpServer};
 
-pub fn main() {
-    let addr = "0.0.0.0:9898";
-    let router = build_simple_router(|route| {
-        route.get("/").to_dir(
-            FileOptions::new("assets/")
-                .with_cache_control("no-cache")
-                .with_gzip(true)
-                .build(),
-        );
-    });
-
-    gotham::start(addr, router)
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            // Serve a tree of static files at the web root and specify the index file.
+            // Note that the root path should always be defined as the last item. The paths are
+            // resolved in the order they are defined. If this would be placed before the `/images`
+            // path then the service for the static images would never be reached.
+            .service(Files::new("/", "./static").index_file("index.html"))
+    })
+    .bind("0.0.0.0:9898")?
+    .run()
+    .await
 }
