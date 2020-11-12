@@ -33,7 +33,8 @@ RUN strip --strip-all target/aarch64-unknown-linux-musl/release/server
 FROM arm64v8/busybox:latest AS runtime
 COPY --from=builder /app/target/aarch64-unknown-linux-musl/release/server ./
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /app/static ./
+RUN mkdir static
+COPY --from=builder /app/static ./static
 
 ENTRYPOINT [ "./server" ]
 EXPOSE 9898/tcp
