@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        deployment: homepage
+    spec:
+      containers:
+        - name: homepage
+          imagePullPolicy: Always
+          image: tommady/homepage:latest
+          ports:
+            - containerPort: 9898
