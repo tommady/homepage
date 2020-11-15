@@ -4,6 +4,9 @@ build-wasm:
 build-server:
 	cargo build --release --package server
 
+run-server:
+	cargo run --package server
+
 build-image:
 	podman build --tag docker.io/tommady/homepage:latest --format docker --arch arm64 --os linux --platform linux/arm64 --squash-all .
 

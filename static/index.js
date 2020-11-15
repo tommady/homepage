@@ -48,11 +48,13 @@ const runWasm = async () => {
     const octocat = Animation.new("octocat");
     const email = Animation.new("email");
     const linkedin = Animation.new("linkedin");
+    const blog = Animation.new("blog");
      
     const drawFuncs = [
         { instance: octocat, href: "https://github.com/tommady" },
         { instance: email, href: "mailto:lindroos.hsu@tommady.com" },
-        { instance: linkedin, href: "https://www.linkedin.com/in/lindrooshsu" }
+        { instance: linkedin, href: "https://www.linkedin.com/in/lindrooshsu" },
+        { instance: blog, href: "https://blog.tommady.com" }
     ].map(draw);
     
     drawFuncs.forEach(function(func){

@@ -29,6 +29,7 @@ impl Animation {
             "octocat" => ascii = include_str!("../textures/octocat.asciiart"),
             "email" => ascii = include_str!("../textures/email.asciiart"),
             "linkedin" => ascii = include_str!("../textures/linkedin.asciiart"),
+            "blog" => ascii = include_str!("../textures/blog.asciiart"),
             _ => ascii = include_str!("../textures/octocat.asciiart"),
         }
 
