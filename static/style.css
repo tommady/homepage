@@ -2,9 +2,6 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60%;
-    margin: 30px;
-    padding: 30px;
     
     font-family: "Press Start 2P";
 }
@@ -21,9 +18,15 @@ html, body {
 
 .social-links li {
     display: inline-block;
-    margin: 30px;
+    margin: 10px;
 }
 
 .profile-picture {
-  border-radius: 60%;
+    border-radius: 60%;
+}
+
+p {
+    word-break: break-word;
+    font-size: small;
+    text-align: center;
 }
