@@ -13,6 +13,6 @@ spec:
       containers:
         - name: homepage
           imagePullPolicy: Always
-          image: tommady/homepage:latest
+          image: docker.io/tommady/homepage:latest
           ports:
             - containerPort: 9898
