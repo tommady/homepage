@@ -38,7 +38,7 @@ jobs:
 
     - name: Building WASM
       run: |
-        wasm-pack build --release --no-typescript --target web --out-dir ./pkg
+        wasm-pack build --release --no-typescript --target web --out-dir ../static/pkg wasm
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
