@@ -1,0 +1,45 @@
+name: Checking
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Rust enviroment
+      uses: actions-rs/toolchain@v1
+      with: 
+        toolchain: stable
+        override: true
+        profile: minimal
+        components: rustfmt, clippy
+
+    - name: Install Wasm-pack
+      # install wasm-pack from downloading is more faster then cargo install
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+    - name: Using cache to speed up
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Check Wasm
+      run: |
+        wasm-pack test --node --release wasm
+
+    - name: Check Formatting
+      run: cargo fmt --all -- --check 
+
+    - name: Check Clippy Lints 
+      run: cargo clippy --all-targets --all-features -- -D warnings

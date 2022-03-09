@@ -13,7 +13,6 @@ pub struct Animation {
     rng: rand::rngs::ThreadRng,
 }
 
-#[wasm_bindgen]
 impl Animation {
     pub fn new(name: &str) -> Animation {
         let mut animation = Vec::new();
@@ -42,8 +41,8 @@ impl Animation {
         let width = animation[0].len();
 
         Animation {
-            width: width,
-            height: height,
+            width,
+            height,
             original: animation,
             // muliple 4 is for rgba color
             output: vec![0; width * height * 4],
@@ -64,9 +63,9 @@ impl Animation {
     }
 
     pub fn gen(&mut self) {
-        let red: u8 = self.rng.gen_range(0, 255);
-        let green: u8 = self.rng.gen_range(0, 255);
-        let blue: u8 = self.rng.gen_range(0, 255);
+        let red: u8 = self.rng.gen_range(0..255);
+        let green: u8 = self.rng.gen_range(0..255);
+        let blue: u8 = self.rng.gen_range(0..255);
 
         for y in 0..self.height {
             for x in 0..self.width {
@@ -74,7 +73,7 @@ impl Animation {
                     let index: usize = y * self.width + x;
                     let rgba_index: usize = index * 4;
 
-                    self.output[rgba_index + 0] = red;
+                    self.output[rgba_index] = red;
                     self.output[rgba_index + 1] = green;
                     self.output[rgba_index + 2] = blue;
                     self.output[rgba_index + 3] = 255;
