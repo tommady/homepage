@@ -1,5 +1,7 @@
 FROM --platform=$BUILDPLATFORM docker.io/busybox:latest AS runtime
 
+ARG TARGETPLATFORM
+
 RUN mkdir static
 COPY static static
 
