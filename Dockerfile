@@ -1,5 +1,6 @@
 FROM --platform=$BUILDPLATFORM docker.io/busybox:latest
 
+RUN mkdir static
 COPY static static
 
 EXPOSE 9898/tcp
