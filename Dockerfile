@@ -1,6 +1,8 @@
 FROM --platform=$TARGETPLATFORM docker.io/busybox:latest
 
+RUN mkdir static
 COPY static static
 
 EXPOSE 9898/tcp
-ENTRYPOINT ["httpd", "-f", "-p", "0.0.0.0:9898", "-h", "/static"]
+RUN echo "E404:index.html" > /etc/httpd.conf
+ENTRYPOINT ["httpd", "-f", "-p", "0.0.0.0:9898", "-h", "/static", "-c", "/etc/httpd.conf"]
