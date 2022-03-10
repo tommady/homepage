@@ -11,6 +11,7 @@ jobs:
 
   build-image:
     concurrency: build-iamge-ci-${{ github.ref }}
+    needs: call-workflow-check
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
