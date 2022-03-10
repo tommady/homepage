@@ -1,8 +1,5 @@
-use rand::Rng;
-use wasm_bindgen::prelude::*;
-
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+use rand::{rngs::SmallRng, Rng, SeedableRng};
+use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
 pub struct Animation {
@@ -10,27 +7,25 @@ pub struct Animation {
     height: usize,
     original: Vec<Vec<char>>,
     output: Vec<u8>,
-    rng: rand::rngs::ThreadRng,
+    rng: SmallRng,
 }
 
+// since this issue
+// https://github.com/rustwasm/wasm-bindgen/issues/2774
+// so do a workaround here
+#[allow(clippy::unused_unit)]
+#[wasm_bindgen]
 impl Animation {
     pub fn new(name: &str) -> Animation {
         let mut animation = Vec::new();
 
-        // this is weird...
-        // if not using the #[allow(unused_assignments)], will showing:
-        // unused_assignments: value assigned to `ascii` is never read  note: `#[warn(unused_assignments)]` on by default help:
-        // maybe it is overwritten before being read?
-        #[allow(unused_assignments)]
-        let mut ascii: &str = "";
-
-        match name {
-            "octocat" => ascii = include_str!("../textures/octocat.asciiart"),
-            "email" => ascii = include_str!("../textures/email.asciiart"),
-            "linkedin" => ascii = include_str!("../textures/linkedin.asciiart"),
-            "blog" => ascii = include_str!("../textures/blog.asciiart"),
-            _ => ascii = include_str!("../textures/octocat.asciiart"),
-        }
+        let ascii = match name {
+            "octocat" => include_str!("../textures/octocat.asciiart"),
+            "email" => include_str!("../textures/email.asciiart"),
+            "linkedin" => include_str!("../textures/linkedin.asciiart"),
+            "blog" => include_str!("../textures/blog.asciiart"),
+            _ => include_str!("../textures/octocat.asciiart"),
+        };
 
         for line in ascii.lines() {
             let row: Vec<char> = line.chars().collect();
@@ -39,6 +34,13 @@ impl Animation {
 
         let height = animation.len();
         let width = animation[0].len();
+        let seed = match name {
+            "octocat" => 3345678,
+            "email" => 449,
+            "linkedin" => 666,
+            "blog" => 999,
+            _ => 3345678,
+        };
 
         Animation {
             width,
@@ -46,7 +48,7 @@ impl Animation {
             original: animation,
             // muliple 4 is for rgba color
             output: vec![0; width * height * 4],
-            rng: rand::thread_rng(),
+            rng: SmallRng::seed_from_u64(seed),
         }
     }
 
