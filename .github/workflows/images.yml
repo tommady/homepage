@@ -6,6 +6,9 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
+  call-workflow-check:
+    uses: ./.github/workflows/check.yml
+
   build-image:
     concurrency: build-iamge-ci-${{ github.ref }}
     runs-on: ubuntu-latest
