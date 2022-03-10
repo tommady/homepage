@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/busybox:latest
+FROM --platform=$TARGETPLATFORM docker.io/busybox:latest
 
 WORKDIR /static
 COPY static .
