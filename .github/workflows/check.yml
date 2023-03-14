@@ -27,7 +27,7 @@ jobs:
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
     - name: Using cache to speed up
-      uses: actions/cache@v3.3.0
+      uses: actions/cache@v3.3.1
       with:
         path: |
           ~/.cargo/bin/
